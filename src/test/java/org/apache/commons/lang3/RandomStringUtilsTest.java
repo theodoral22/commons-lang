@@ -17,11 +17,8 @@
 package org.apache.commons.lang3;
 
 import static org.apache.commons.lang3.LangAssertions.assertIllegalArgumentException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -814,5 +811,22 @@ class RandomStringUtilsTest extends AbstractLangTest {
         final String r3 = rsu.next(50, 0, 0, true, true, digitChars);
         assertNotEquals(r1, r3);
         assertNotEquals(r2, r3);
+    }
+
+    @Test
+    void testStartEndOutOfRangeWithChars_shouldThrow() {
+        final char[] chars = { 'a', 'b', 'c' };
+        final Random random = new Random();
+        IllegalArgumentException ex;
+
+        ex = assertThrows(IllegalArgumentException.class, () ->
+                RandomStringUtils.random(5, 5, 10, false, false, chars, random)
+        );
+        System.out.println("Caught exception: " + ex.getMessage());
+
+        ex = assertThrows(IllegalArgumentException.class, () ->
+                RandomStringUtils.random(5, 0, 5, false, false, chars, random)
+        );
+        System.out.println("Caught exception: " + ex.getMessage());
     }
 }
